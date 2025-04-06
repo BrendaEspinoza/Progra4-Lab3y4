@@ -1,67 +1,17 @@
-import { useState, useRef } from 'react'
 import './App.css'
-import Home from './Components/Home'
+import Login from './Components/Login'
+import {WelcomeWidget} from './Components/WelcomeWidget'
+import { AuthContext } from './Context/AuthContext'
+import { useContext } from 'react'
+
 
 function App() {
 
-  const emailRef = useRef()
-  const passwordRef = useRef('')
-  const [error, setError] = useState('')
-  const [user, setUser] = useState(null)
-
-
-  const login = (email, password) => {
-    // Fake login check
-    if (email === "admin" && password === "1234") {
-      //alert("Bienvenido");
-      return true;
-    }
-    return false;
-  };
-
-
-  const handleLogin = () => {
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-    const isSuccess = login(email, password);
-    if (!isSuccess) 
-    {
-      setError("Credenciales incorrectas");
-    }
-    else
-    {
-      setUser({email})
-    }
-  }
+  const { user } = useContext(AuthContext)
 
   return (
     <>
-
-      <h2>Login</h2>
-
-      {
-        !user ?
-          (<div>
-            <input
-              type="email"
-              placeholder='Correo'
-              ref={emailRef}
-            />
-            <br />
-            <input
-              type="password"
-              placeholder='Contraseña'
-              ref={passwordRef}
-            />
-            <br />
-            <button onClick={handleLogin}>Ingresar</button>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-          </div>) :
-          (
-            <Home email={user.email}/>
-          )
-      }
-
+      { user ? <WelcomeWidget userName={user} /> : <Login/>}             
     </>
   )
 }
